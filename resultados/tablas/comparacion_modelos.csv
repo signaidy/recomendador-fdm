@@ -1,0 +1,73 @@
+campana,respuesta,unidad,n,validacion,modelo,mae,mae_sd_pliegues,destreza_S
+Patil L16 PLA,rugosidad_ra_um_cara_superior,µm,16,LeaveOneOut,Línea base (mediana),1.5561743055555555,1.897093309650411,0.0
+Patil L16 PLA,rugosidad_ra_um_cara_superior,µm,16,LeaveOneOut,Ridge (efectos principales),1.2871110198342284,1.012189915682132,0.17290048085279963
+Patil L16 PLA,rugosidad_ra_um_cara_superior,µm,16,LeaveOneOut,SVR RBF (anidado),0.9286508477531306,1.2209868875714136,0.4032475382495141
+Patil L16 PLA,rugosidad_ra_um_cara_superior,µm,16,LeaveOneOut,kNN (anidado),1.304039270334656,1.5775822560649864,0.16202236106892098
+Patil L16 PLA,rugosidad_ra_um_cara_superior,µm,16,LeaveOneOut,Bosque aleatorio,1.268328125881835,1.4807067480358835,0.1849703973687954
+Patil L16 PLA,rugosidad_ra_um_cara_superior,µm,16,LeaveOneOut,Gradient boosting,0.9053333539632165,1.1046480758820965,0.41823139558906175
+Patil L16 PLA,tiempo_construccion_min,min,16,LeaveOneOut,Línea base (mediana),21.9375,16.645077162632802,0.0
+Patil L16 PLA,tiempo_construccion_min,min,16,LeaveOneOut,Ridge (efectos principales),15.883899685877179,8.650841105473928,0.2759475926665673
+Patil L16 PLA,tiempo_construccion_min,min,16,LeaveOneOut,SVR RBF (anidado),8.626146941619666,5.26025289548524,0.6067853245985337
+Patil L16 PLA,tiempo_construccion_min,min,16,LeaveOneOut,kNN (anidado),14.20884161943643,8.830660037291212,0.3523035159231257
+Patil L16 PLA,tiempo_construccion_min,min,16,LeaveOneOut,Bosque aleatorio,12.045582961309524,8.814973044559311,0.4509135972052639
+Patil L16 PLA,tiempo_construccion_min,min,16,LeaveOneOut,Gradient boosting,8.970537682574468,7.085550577515908,0.5910866013641268
+Patil L16 PLA,error_lado_cubo_mm,mm,16,LeaveOneOut,Línea base (mediana),0.04921875000000189,0.05926449420553115,0.0
+Patil L16 PLA,error_lado_cubo_mm,mm,16,LeaveOneOut,Ridge (efectos principales),0.060767349277498134,0.0610564389222587,-0.23463820754277176
+Patil L16 PLA,error_lado_cubo_mm,mm,16,LeaveOneOut,SVR RBF (anidado),0.05222328159388796,0.062315511789240115,-0.061044451431333746
+Patil L16 PLA,error_lado_cubo_mm,mm,16,LeaveOneOut,kNN (anidado),0.082249264990034,0.060891776461128096,-0.6710961775752298
+Patil L16 PLA,error_lado_cubo_mm,mm,16,LeaveOneOut,Bosque aleatorio,0.05933419379340208,0.053306300442002186,-0.20552012786590068
+Patil L16 PLA,error_lado_cubo_mm,mm,16,LeaveOneOut,Gradient boosting,0.09231956221327411,0.05760018634957491,-0.8756990417934336
+Okudan PLA depurado,tension_strength,MPa,33,LeaveOneOut,Línea base (mediana),6.954545454545454,5.617024495881056,0.0
+Okudan PLA depurado,tension_strength,MPa,33,LeaveOneOut,Ridge (efectos principales),6.401074751558257,11.192827315205209,0.0795840226517539
+Okudan PLA depurado,tension_strength,MPa,33,LeaveOneOut,SVR RBF (anidado),6.015480521085683,4.896628798642421,0.13502894468048998
+Okudan PLA depurado,tension_strength,MPa,33,LeaveOneOut,kNN (anidado),5.168247299298258,5.246888655153859,0.2568533295126687
+Okudan PLA depurado,tension_strength,MPa,33,LeaveOneOut,Bosque aleatorio,3.9459246195723443,3.823560677365697,0.43261214620528377
+Okudan PLA depurado,tension_strength,MPa,33,LeaveOneOut,Gradient boosting,4.002979418395565,4.48719167124708,0.4244081882045593
+Aktepe PLA+,tension_maxima_mpa,MPa,240,RepeatedKFold,Línea base (mediana),5.659129236111111,0.5932051824878417,0.0
+Aktepe PLA+,tension_maxima_mpa,MPa,240,RepeatedKFold,Ridge (efectos principales),2.247055599738809,0.18055883771223594,0.602932623379536
+Aktepe PLA+,tension_maxima_mpa,MPa,240,RepeatedKFold,SVR RBF (anidado),1.8348410987507573,0.16941990752865002,0.6757732466962286
+Aktepe PLA+,tension_maxima_mpa,MPa,240,RepeatedKFold,kNN (anidado),2.941513170364771,0.26630656069125436,0.48021806047565274
+Aktepe PLA+,tension_maxima_mpa,MPa,240,RepeatedKFold,Bosque aleatorio,2.7275382003736843,0.24505874103853395,0.5180286424686746
+Aktepe PLA+,tension_maxima_mpa,MPa,240,RepeatedKFold,Gradient boosting,1.944231780981092,0.22426218364436273,0.656443297217021
+Aktepe PLA+,rugosidad_ra_um,µm,237,RepeatedKFold,Línea base (mediana),1.800070345744681,0.17171829252295878,0.0
+Aktepe PLA+,rugosidad_ra_um,µm,237,RepeatedKFold,Ridge (efectos principales),0.6729364838582551,0.04208405729637871,0.6261610078466882
+Aktepe PLA+,rugosidad_ra_um,µm,237,RepeatedKFold,SVR RBF (anidado),0.6442602026216425,0.04173147258724425,0.6420916526153232
+Aktepe PLA+,rugosidad_ra_um,µm,237,RepeatedKFold,kNN (anidado),0.7001087153207899,0.04551231424991877,0.6110659136317487
+Aktepe PLA+,rugosidad_ra_um,µm,237,RepeatedKFold,Bosque aleatorio,0.5857768827946139,0.048914387304643,0.6745811161328361
+Aktepe PLA+,rugosidad_ra_um,µm,237,RepeatedKFold,Gradient boosting,0.6405188792825735,0.03933046575571078,0.6441700843543458
+Aktepe PLA+,dureza_shore,Shore,240,RepeatedKFold,Línea base (mediana),3.726666666666668,0.5946935485329111,0.0
+Aktepe PLA+,dureza_shore,Shore,240,RepeatedKFold,Ridge (efectos principales),3.3640211534330713,0.3394427550369966,0.09731096061724409
+Aktepe PLA+,dureza_shore,Shore,240,RepeatedKFold,SVR RBF (anidado),2.1999298277062627,0.3016171205197587,0.4096789371092321
+Aktepe PLA+,dureza_shore,Shore,240,RepeatedKFold,kNN (anidado),2.3772435139407997,0.413612458101771,0.362099235972952
+Aktepe PLA+,dureza_shore,Shore,240,RepeatedKFold,Bosque aleatorio,1.9872216055931544,0.4510819741868037,0.46675627756892113
+Aktepe PLA+,dureza_shore,Shore,240,RepeatedKFold,Gradient boosting,2.0860921304314495,0.29387642570244366,0.4402257252867311
+Aktepe PLA,tension_maxima_mpa,MPa,18,LeaveOneOut,Línea base (mediana),5.279685185185185,3.4390967856063863,0.0
+Aktepe PLA,tension_maxima_mpa,MPa,18,LeaveOneOut,Ridge (efectos principales),5.376377558819972,3.5201615452891333,-0.018314041508782797
+Aktepe PLA,tension_maxima_mpa,MPa,18,LeaveOneOut,SVR RBF (anidado),5.929453613287961,3.4378936619923492,-0.12306954019266692
+Aktepe PLA,tension_maxima_mpa,MPa,18,LeaveOneOut,kNN (anidado),8.699670370370374,3.2479418437840892,-0.6477630891291926
+Aktepe PLA,tension_maxima_mpa,MPa,18,LeaveOneOut,Bosque aleatorio,6.433469170859049,3.1910508959915234,-0.21853272405547708
+Aktepe PLA,tension_maxima_mpa,MPa,18,LeaveOneOut,Gradient boosting,8.492405441480523,3.326197553218109,-0.6085060270847666
+"Erkan PLA, todas las caras",rugosidad_ra_um,µm,1566,GroupKFold,Línea base (mediana),6.87298198983297,0.083989911892583,0.0
+"Erkan PLA, todas las caras",rugosidad_ra_um,µm,1566,GroupKFold,Ridge (efectos principales),6.142684370599463,0.11539086277910876,0.1062562975305068
+"Erkan PLA, todas las caras",rugosidad_ra_um,µm,1566,GroupKFold,SVR RBF (anidado),4.3866361236843945,0.1421037354832969,0.36175649373540686
+"Erkan PLA, todas las caras",rugosidad_ra_um,µm,1566,GroupKFold,kNN (anidado),2.825545313951789,0.8455602593376199,0.5888909183624302
+"Erkan PLA, todas las caras",rugosidad_ra_um,µm,1566,GroupKFold,Bosque aleatorio,1.6241706530843558,0.10745884799073085,0.7636876314404795
+"Erkan PLA, todas las caras",rugosidad_ra_um,µm,1566,GroupKFold,Gradient boosting,2.037404024081524,0.1042720770316275,0.7035633110787421
+"Erkan PLA, todas las caras, sin inclinación",rugosidad_ra_um,µm,1566,GroupKFold,Línea base (mediana),6.87298198983297,0.083989911892583,0.0
+"Erkan PLA, todas las caras, sin inclinación",rugosidad_ra_um,µm,1566,GroupKFold,Ridge (efectos principales),6.191665648236883,0.10533718537301984,0.099129656181835
+"Erkan PLA, todas las caras, sin inclinación",rugosidad_ra_um,µm,1566,GroupKFold,SVR RBF (anidado),6.139515729198142,0.1003683446876007,0.10671732615039964
+"Erkan PLA, todas las caras, sin inclinación",rugosidad_ra_um,µm,1566,GroupKFold,kNN (anidado),6.9664327251270874,0.6264795178924591,-0.013596825283749725
+"Erkan PLA, todas las caras, sin inclinación",rugosidad_ra_um,µm,1566,GroupKFold,Bosque aleatorio,6.196917301719602,0.09539802492273032,0.098365555025963
+"Erkan PLA, todas las caras, sin inclinación",rugosidad_ra_um,µm,1566,GroupKFold,Gradient boosting,6.197037634973439,0.09292095527749535,0.0983480468680753
+"Erkan PLA, cara superior 0°",rugosidad_ra_um,µm,87,RepeatedKFold,Línea base (mediana),2.8481274509803924,0.8418721066893297,0.0
+"Erkan PLA, cara superior 0°",rugosidad_ra_um,µm,87,RepeatedKFold,Ridge (efectos principales),2.9930643249398066,0.7948219931724895,-0.05088847899328508
+"Erkan PLA, cara superior 0°",rugosidad_ra_um,µm,87,RepeatedKFold,SVR RBF (anidado),2.892854868565477,0.8385344841657926,-0.01570414890305849
+"Erkan PLA, cara superior 0°",rugosidad_ra_um,µm,87,RepeatedKFold,kNN (anidado),3.290226693939427,0.7402550483482246,-0.1552245292979615
+"Erkan PLA, cara superior 0°",rugosidad_ra_um,µm,87,RepeatedKFold,Bosque aleatorio,3.295594815845311,0.6770587665961546,-0.15710931921634685
+"Erkan PLA, cara superior 0°",rugosidad_ra_um,µm,87,RepeatedKFold,Gradient boosting,3.192274797258086,0.7480603266037457,-0.12083284621242285
+"Erkan PLA, pared vertical 90°",rugosidad_ra_um,µm,87,RepeatedKFold,Línea base (mediana),2.824017211328976,1.0574554689847941,0.0
+"Erkan PLA, pared vertical 90°",rugosidad_ra_um,µm,87,RepeatedKFold,Ridge (efectos principales),1.631921183614513,0.41557799358681713,0.42212774870216363
+"Erkan PLA, pared vertical 90°",rugosidad_ra_um,µm,87,RepeatedKFold,SVR RBF (anidado),1.42584424055057,0.43309737499320006,0.4951007257212958
+"Erkan PLA, pared vertical 90°",rugosidad_ra_um,µm,87,RepeatedKFold,kNN (anidado),2.3886257502248873,0.7852557275465486,0.15417450692490453
+"Erkan PLA, pared vertical 90°",rugosidad_ra_um,µm,87,RepeatedKFold,Bosque aleatorio,1.0369991018976754,0.25992309349178655,0.6327929243003211
+"Erkan PLA, pared vertical 90°",rugosidad_ra_um,µm,87,RepeatedKFold,Gradient boosting,1.0596376884565466,0.2715972669215716,0.6247764765010467

@@ -33,9 +33,13 @@ El entorno virtual está excluido de git; `requirements.txt` sí se versiona.
 | `src/extraer_patil_l16.py` | Convierte el xlsx crudo de Patil et al. a `datos/procesados/patil_l16_pla.csv` |
 | `src/auditoria_dispersion.py` | Dispersión de las respuestas y línea base sin destreza. Solo biblioteca estándar |
 | `src/verificar_entorno.py` | Comprueba que scikit-learn, SHAP, pymoo, matplotlib y streamlit funcionan juntos |
+| `src/extraer_aktepe_ergun.py` | Convierte el xlsx crudo de Aktepe y Ergün (500 corridas, 10 materiales) a `datos/procesados/aktepe_ergun_fdm_500.csv`, normalizando patrón de relleno y marcando la rugosidad centinela |
+| `src/extraer_erkan_ra.py` | Renombra y valida el CSV crudo de Erkan, Sürer y Yaman (Ra en PLA, Box-Behnken) a `datos/procesados/erkan_ra_pla_box_behnken.csv` |
+| `src/comparar_modelos.py` | Compara línea base, ridge, SVR, kNN, bosque aleatorio y gradient boosting sobre todas las campañas con validación cruzada anidada y agrupada; escribe `resultados/tablas/comparacion_modelos.csv` |
 
-Los dos primeros no requieren el entorno virtual: usan solo la biblioteca estándar, de modo que la
-auditoría de datos es reproducible en cualquier instalación de Python.
+Los extractores y la auditoría de dispersión no requieren el entorno virtual: usan solo la
+biblioteca estándar, de modo que la auditoría de datos es reproducible en cualquier instalación
+de Python. `comparar_modelos.py` sí requiere el entorno virtual.
 
 ## Datos
 
