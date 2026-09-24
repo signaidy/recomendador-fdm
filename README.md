@@ -36,6 +36,9 @@ El entorno virtual está excluido de git; `requirements.txt` sí se versiona.
 | `src/extraer_aktepe_ergun.py` | Convierte el xlsx crudo de Aktepe y Ergün (500 corridas, 10 materiales) a `datos/procesados/aktepe_ergun_fdm_500.csv`, normalizando patrón de relleno y marcando la rugosidad centinela |
 | `src/extraer_erkan_ra.py` | Renombra y valida el CSV crudo de Erkan, Sürer y Yaman (Ra en PLA, Box-Behnken) a `datos/procesados/erkan_ra_pla_box_behnken.csv` |
 | `src/comparar_modelos.py` | Compara línea base, ridge, SVR, kNN, bosque aleatorio y gradient boosting sobre todas las campañas con validación cruzada anidada y agrupada; escribe `resultados/tablas/comparacion_modelos.csv` |
+| `src/entrenar_sustituto.py` | Entrena la red ReLU sustituta sobre Aktepe y Ergün (selección de arquitectura por validación cruzada, destreza por material) y exporta pesos a `resultados/modelos/` (unos 8 minutos) |
+| `src/estimar_tiempo_orca.py` | Genera la probeta ASTM D638 tipo IV como STL, escribe un perfil de proceso de OrcaSlicer por combinación de parámetros, lamina por línea de comandos para la Creality K1C con hasta seis procesos en paralelo (`--paralelo`), reanudable, y extrae tiempo y filamento de cada 3MF a `datos/procesados/orca_k1c_tiempo_material.csv`. `--limite N` prueba la cadena; `--solo-preparar` no invoca el laminador |
+| `src/optimizar_milp.py` | Codifica la red como programa lineal entero mixto en cvxpy, lo resuelve con HiGHS bajo restricciones (`--ra-max`, `--densidad-max`, `--altura-min`, `--velocidad-min`, `--impresora`, `--patron`, `--continuo`, pesos), verifica contra enumeración exhaustiva y traza la frontera por método epsilon en `resultados/` |
 
 Los extractores y la auditoría de dispersión no requieren el entorno virtual: usan solo la
 biblioteca estándar, de modo que la auditoría de datos es reproducible en cualquier instalación
@@ -46,6 +49,7 @@ de Python. `comparar_modelos.py` sí requiere el entorno virtual.
 ```
 datos/crudos/         sin modificar, con huella SHA-256 y fecha de descarga
 datos/procesados/     derivados reproducibles a partir de los crudos
+datos/literatura/     tablas transcritas de artículos, una campaña por archivo (véase su README)
 ```
 
 La procedencia, licencia y veredicto de cada fuente está en

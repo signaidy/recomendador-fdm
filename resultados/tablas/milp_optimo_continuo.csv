@@ -1,0 +1,2 @@
+altura_capa_mm,densidad_relleno_pct,velocidad_impresion_mms,patron_relleno,tipo_impresora,material,pred_tension_maxima_mpa,pred_rugosidad_ra_um,pred_dureza_shore,tiempo_relativo,objetivo,estado,segundos,binarias_relu
+0.3,80.0,70.0,cubic,open,PLA+,53.961310818699644,13.386472166952899,73.86593003478326,0.6190476190476192,53.961310818699644,optimal,0.24521830002777278,16
