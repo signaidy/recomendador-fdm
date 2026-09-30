@@ -57,6 +57,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 SALIDA = ROOT / "proyecto" / "datos" / "procesados" / "orca_k1c_tiempo_material.csv"
 TRABAJO = ROOT / "proyecto" / "resultados" / "orca"
+# Probeta de validación: ISO 527-2 tipo 1A (170 x 20 x 4 mm, zona calibrada 10 mm), Printables 653017, JoshEmmel, CC BY-NC 4.0.
+PROBETA_ISO527_1A = ROOT / "proyecto" / "datos" / "crudos" / "probetas" / "iso527_1a_testspecimen.stl"
 # Copias resueltas (herencia aplanada) de los preajustes de sistema de OrcaSlicer 2.4.2 para la K1C.
 ORCA_SISTEMA = ROOT / "proyecto" / "datos" / "crudos" / "orca_v2.4.2"
 # Perfiles de sistema de la instalación local de OrcaSlicer (la CLI resuelve su herencia).
@@ -306,7 +308,8 @@ def main() -> None:
                     help="JSON de perfil de proceso del que heredan las combinaciones; por defecto «0.20mm Standard @Creality K1C 0.4 nozzle» resuelto")
     ap.add_argument("--filamento", default=str(ORCA_SISTEMA / "filament_eSUN_PLA+_K1C_tesis.json"),
                     help="JSON de perfil de filamento plano; por defecto el preajuste eSUN PLA+ derivado de «Generic PLA @K1C» con los valores de la hoja técnica")
-    ap.add_argument("--stl", help="probeta propia; si se omite se genera ASTM D638 tipo IV")
+    ap.add_argument("--stl", default=str(PROBETA_ISO527_1A),
+                    help="probeta a laminar (por defecto la ISO 527-2 tipo 1A de Printables 653017); --stl generar produce la ASTM D638 tipo IV propia")
     ap.add_argument("--espesor", type=float, default=3.2)
     ap.add_argument("--patrones", default="grid,triangles,zigzag,lines,cubic,gyroid,tri_hexagon,concentric,lightning,cubic_subdivision",
                     help="patrones de Aktepe a laminar (nomenclatura del CSV procesado)")
@@ -321,8 +324,8 @@ def main() -> None:
     (TRABAJO / "perfiles").mkdir(exist_ok=True)
     (TRABAJO / "gcode").mkdir(exist_ok=True)
 
-    stl = Path(args.stl) if args.stl else TRABAJO / "probeta_astm_d638_tipo_iv.stl"
-    if not args.stl:
+    stl = TRABAJO / "probeta_astm_d638_tipo_iv.stl" if args.stl == "generar" else Path(args.stl)
+    if args.stl == "generar":
         volumen = escribir_stl(contorno_superior_d638_iv(), args.espesor, stl)
         print(f"STL generado: {stl} | volumen {volumen:.0f} mm³ | masa a 1.24 g/cm³ y 100 % de relleno: {volumen * 1.24 / 1000:.2f} g")
 

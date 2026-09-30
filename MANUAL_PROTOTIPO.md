@@ -10,8 +10,8 @@ El prototipo recomienda una combinación de altura de capa, densidad y patrón d
 velocidad de impresión que maximiza la resistencia a la tracción predicha, sujeta a las cotas y
 prioridades que el usuario introduce. La recomendación es la configuración de mayor puntuación ponderada S = w_r·R_n + w_q·Q_n − w_m·M_n − w_t·T_n, con las respuestas normalizadas al dominio y los pesos sumando 1; junto a ella se muestra la solución de compromiso, que no depende de los pesos. La predicción
 la hace un sustituto neuronal entrenado con 483 combinaciones del conjunto de Aktepe y Ergün; el
-tiempo y el filamento provienen del laminado real con OrcaSlicer 2.4.2 de la probeta ASTM D638
-tipo IV en la Creality K1C; la optimización es un programa lineal entero mixto resuelto al óptimo
+tiempo y el filamento provienen del laminado real con OrcaSlicer 2.4.2 de la probeta ISO 527-2 tipo 1A
+en la Creality K1C; la optimización es un programa lineal entero mixto resuelto al óptimo
 global con HiGHS; y la explicación usa valores de Shapley.
 
 No certifica seguridad estructural, no extrapola fuera del dominio de entrenamiento y no sustituye
@@ -70,7 +70,7 @@ La barra lateral contiene las entradas; la página principal, los resultados.
 
 1. **Obtener una recomendación sin restricciones.** Deje los controles por defecto. La
    recomendación es la combinación de mayor resistencia predicha del dominio.
-2. **Imponer una cota.** Mueva «Rugosidad Ra máxima» a 4 µm y «Tiempo máximo» a 20 min. La
+2. **Imponer una cota.** Mueva «Rugosidad Ra máxima» a 4 µm y «Tiempo máximo» a 30 min. La
    recomendación cambia y los indicadores muestran cuánto se cede en resistencia.
 3. **Cambiar prioridades.** Elija el perfil «Económico» o suba el peso de «Tiempo y energía».
    La puntuación S reordena las alternativas y la recomendación cambia; la línea de estabilidad
@@ -80,7 +80,7 @@ La barra lateral contiene las entradas; la página principal, los resultados.
    causalidad física.
 5. **Comparar dos candidatas.** En «Comparar dos configuraciones», seleccione A y B y lea las
    predicciones con su ± MAE. Si las bandas se solapan, la diferencia está dentro del error.
-6. **Caso sin solución.** Con cotas incompatibles (por ejemplo Ra ≤ 2 µm y tiempo ≤ 13 min) la
+6. **Caso sin solución.** Con cotas incompatibles (por ejemplo Ra ≤ 2 µm y tiempo ≤ 20 min) la
    interfaz informa que ninguna combinación laminable las cumple y pide relajar alguna.
 
 ## 6. Advertencias que muestra

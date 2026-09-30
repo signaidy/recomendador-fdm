@@ -99,9 +99,11 @@ def main() -> None:
     sb.header("1. Restricciones")
     ra_max = sb.slider("Rugosidad Ra máxima (µm)", 1.0, 10.0, 10.0, 0.5)
     t_lim = int(np.ceil(max(t for t, _ in orca.values()))) if orca else 61
+    t_min = int(np.floor(min(t for t, _ in orca.values()))) if orca else 12
     m_lim = float(np.ceil(max(m for _, m in orca.values()) * 10) / 10) if orca else 6.5
-    tiempo_max = sb.slider("Tiempo máximo (min)", 12, t_lim, t_lim, 1)
-    material_max = sb.slider("Filamento máximo (g)", 3.0, m_lim, m_lim, 0.1)
+    m_min = float(np.floor(min(m for _, m in orca.values()) * 10) / 10) if orca else 3.0
+    tiempo_max = sb.slider("Tiempo máximo (min)", t_min, t_lim, t_lim, 1)
+    material_max = sb.slider("Filamento máximo (g)", m_min, m_lim, m_lim, 0.1)
     extrapolar = sb.checkbox("Permitir densidades fuera del rango de entrenamiento (10 %, 90 % y 100 %; el modelo extrapola)", value=True)
     lo_d, hi_d = om.RANGO_DATOS["densidad_relleno_pct"]
     niveles_d = [int(d) for d in om.NIVELES["densidad_relleno_pct"] if extrapolar or lo_d <= d <= hi_d]

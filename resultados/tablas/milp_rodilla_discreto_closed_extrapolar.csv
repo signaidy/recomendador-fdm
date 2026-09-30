@@ -1,2 +1,2 @@
 altura_capa_mm,densidad_relleno_pct,velocidad_impresion_mms,patron_relleno,tipo_impresora,material,pred_tension_maxima_mpa,pred_rugosidad_ra_um,pred_dureza_shore,tiempo_relativo,tiempo_min,filamento_g,objetivo,admisible,no_dominado,soporte_impresora_patron,beneficio,costo,distancia_cuerda
-0.2,50.0,30.0,cubic,closed,PLA+,38.00619992676897,2.6501220537890178,81.29748325115405,1.6666666666666667,28.8,4.79,38.00619992676897,True,True,10,0.6759108095659851,0.42695539681392913,0.04140707089350035
+0.2,50.0,30.0,cubic,closed,PLA+,38.00619992676897,2.6501220537890178,81.29748325115405,1.6666666666666667,51.93,8.94,38.00619992676897,True,True,10,0.6759108095659851,0.41895505432732805,0.04628858496042849

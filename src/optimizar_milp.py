@@ -500,6 +500,7 @@ def main() -> None:
                    help="admite niveles fuera del rango de entrenamiento (densidad 10, 90 y 100 %%); toda solución que los use se marca como extrapolación")
     p.add_argument("--sin-tiempo", action="store_true", help="ignora la tabla del laminador (comportamiento anterior al 29-09-2026)")
     p.add_argument("--sin-barrido", action="store_true")
+    p.add_argument("--solo-pareto", action="store_true", help="omite el barrido épsilon pero calcula el Pareto exacto, la rodilla y la hipótesis")
     args = p.parse_args()
     if args.impresora == "libre":
         args.impresora = None
@@ -558,51 +559,52 @@ def main() -> None:
     # ---- 3. frontera por barrido de restricciones (método epsilon)
     if not args.sin_barrido:
         con_tabla = orca is not None and not args.continuo and not args.sin_tiempo
-        filas = []
-        ra_caps = np.arange(2.0, 8.01, 0.5)
-        if con_tabla:
-            t_vals = np.array([t for t, _ in orca.values()])
-            t_caps = np.arange(np.ceil(t_vals.min()), np.ceil(t_vals.max()) + 1, 3.0)
-            barrido = [(ra, tc) for ra in ra_caps for tc in t_caps]
-        else:
-            lo_d, hi_d = RANGO_DATOS["densidad_relleno_pct"]
-            barrido = [(ra, dmax) for ra in ra_caps for dmax in NIVELES["densidad_relleno_pct"]
-                       if args.extrapolar or lo_d <= dmax <= hi_d]
-        for ra_max, otro in barrido:
-            a2 = argparse.Namespace(**vars(args))
-            a2.ra_max = float(ra_max)
-            if con_tabla:
-                a2.tiempo_max = float(otro)
-            else:
-                a2.densidad_max = float(otro)
-            s2 = resolver(red, a2, orca)
-            if s2 is not None:
-                s2.update(restr_ra_max=float(ra_max), restr_otro=float(otro), **soporte(s2, datos))
-                filas.append(s2)
-        front = pd.DataFrame(filas)
-        if con_tabla:
-            front["no_dominado"] = no_dominados(front, ["pred_rugosidad_ra_um", "tiempo_min", "filamento_g"], ["pred_tension_maxima_mpa"])
-        else:
-            front["no_dominado"] = no_dominados(front, ["pred_rugosidad_ra_um", "densidad_relleno_pct"], ["pred_tension_maxima_mpa"])
-        front.to_csv(DIR_TABLAS / f"milp_frontera_{modo}.csv", index=False)
-        nd_df = front[front.no_dominado].drop_duplicates(subset=red.numericas + red.categoricas)
-        print(f"\nFRONTERA (método epsilon, {len(front)} resoluciones, {len(nd_df)} configuraciones no dominadas distintas):")
-        cols = red.numericas + ["patron_relleno", "pred_tension_maxima_mpa", "pred_rugosidad_ra_um", "pred_dureza_shore"]
-        cols += ["tiempo_min", "filamento_g"] if con_tabla else ["tiempo_relativo"]
-        cols += ["soporte_impresora_patron"]
-        print(nd_df.sort_values("pred_tension_maxima_mpa", ascending=False)[cols].round(2).to_string(index=False))
-
         import matplotlib
         matplotlib.use("Agg")
         import matplotlib.pyplot as plt
-        fig, ax = plt.subplots(figsize=(7, 4.5))
-        for dmax, g in front.groupby("densidad_relleno_pct"):
-            ax.scatter(g.pred_rugosidad_ra_um, g.pred_tension_maxima_mpa, label=f"relleno {dmax:.0f} %", s=28)
-        ax.set_xlabel("Rugosidad Ra predicha (µm)"); ax.set_ylabel("Tensión máxima predicha (MPa)")
-        ax.set_title(f"Frontera resistencia–rugosidad–relleno, {args.material}, modo {modo} (MILP sobre red ReLU)")
-        ax.grid(alpha=0.3); ax.legend()
-        fig.tight_layout(); fig.savefig(DIR_FIGURAS / f"milp_frontera_{modo}.png", dpi=160)
-        print(f"\nFigura: {DIR_FIGURAS / f'milp_frontera_{modo}.png'}")
+        if not args.solo_pareto:  # el barrido épsilon solo aporta la gráfica 1; el Pareto exacto no lo necesita
+            filas = []
+            ra_caps = np.arange(2.0, 8.01, 0.5)
+            if con_tabla:
+                t_vals = np.array([t for t, _ in orca.values()])
+                t_caps = np.arange(np.ceil(t_vals.min()), np.ceil(t_vals.max()) + 1, 3.0)
+                barrido = [(ra, tc) for ra in ra_caps for tc in t_caps]
+            else:
+                lo_d, hi_d = RANGO_DATOS["densidad_relleno_pct"]
+                barrido = [(ra, dmax) for ra in ra_caps for dmax in NIVELES["densidad_relleno_pct"]
+                           if args.extrapolar or lo_d <= dmax <= hi_d]
+            for ra_max, otro in barrido:
+                a2 = argparse.Namespace(**vars(args))
+                a2.ra_max = float(ra_max)
+                if con_tabla:
+                    a2.tiempo_max = float(otro)
+                else:
+                    a2.densidad_max = float(otro)
+                s2 = resolver(red, a2, orca)
+                if s2 is not None:
+                    s2.update(restr_ra_max=float(ra_max), restr_otro=float(otro), **soporte(s2, datos))
+                    filas.append(s2)
+            front = pd.DataFrame(filas)
+            if con_tabla:
+                front["no_dominado"] = no_dominados(front, ["pred_rugosidad_ra_um", "tiempo_min", "filamento_g"], ["pred_tension_maxima_mpa"])
+            else:
+                front["no_dominado"] = no_dominados(front, ["pred_rugosidad_ra_um", "densidad_relleno_pct"], ["pred_tension_maxima_mpa"])
+            front.to_csv(DIR_TABLAS / f"milp_frontera_{modo}.csv", index=False)
+            nd_df = front[front.no_dominado].drop_duplicates(subset=red.numericas + red.categoricas)
+            print(f"\nFRONTERA (método epsilon, {len(front)} resoluciones, {len(nd_df)} configuraciones no dominadas distintas):")
+            cols = red.numericas + ["patron_relleno", "pred_tension_maxima_mpa", "pred_rugosidad_ra_um", "pred_dureza_shore"]
+            cols += ["tiempo_min", "filamento_g"] if con_tabla else ["tiempo_relativo"]
+            cols += ["soporte_impresora_patron"]
+            print(nd_df.sort_values("pred_tension_maxima_mpa", ascending=False)[cols].round(2).to_string(index=False))
+
+            fig, ax = plt.subplots(figsize=(7, 4.5))
+            for dmax, g in front.groupby("densidad_relleno_pct"):
+                ax.scatter(g.pred_rugosidad_ra_um, g.pred_tension_maxima_mpa, label=f"relleno {dmax:.0f} %", s=28)
+            ax.set_xlabel("Rugosidad Ra predicha (µm)"); ax.set_ylabel("Tensión máxima predicha (MPa)")
+            ax.set_title(f"Frontera resistencia–rugosidad–relleno, {args.material}, modo {modo} (MILP sobre red ReLU)")
+            ax.grid(alpha=0.3); ax.legend()
+            fig.tight_layout(); fig.savefig(DIR_FIGURAS / f"milp_frontera_{modo}.png", dpi=160)
+            print(f"\nFigura: {DIR_FIGURAS / f'milp_frontera_{modo}.png'}")
 
         if con_tabla:
             # Conjunto de Pareto EXACTO: en modo discreto las 270 combinaciones laminables están
