@@ -64,7 +64,7 @@ ORCA_INSTALADO = Path("C:/Program Files/OrcaSlicer/resources/profiles/Creality")
 
 NIVELES = {
     "altura_capa_mm": [0.1, 0.2, 0.3],
-    "densidad_relleno_pct": [20, 50, 80],
+    "densidad_relleno_pct": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
     "velocidad_impresion_mms": [30, 50, 70],
 }
 
