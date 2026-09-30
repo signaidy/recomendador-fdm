@@ -15,9 +15,9 @@ Flujo:
 4. Extrae del encabezado del G-code «estimated printing time» y «filament used [g] / [mm]».
 5. Escribe datos/procesados/orca_k1c_tiempo_material.csv.
 
-El script se preparó sin OrcaSlicer instalado en la máquina de desarrollo: las etapas 1, 2 y 4
-están probadas; la 3 depende de la versión de OrcaSlicer y puede requerir ajustar la ruta del
-ejecutable (--orca) o los nombres de las opciones. Consúltese `orca-slicer.exe --help`.
+Probado con OrcaSlicer 2.4.2 el 29 de septiembre de 2026. Hallazgos: la opción de filamento es
+--load-filaments; la CLI acepta perfiles de proceso y filamento aplanados (sin herencia) pero
+rechaza copias aplanadas de máquina, así que la máquina se toma del JSON de sistema instalado.
 
 Ejecución en paralelo: cada combinación se lamina en un proceso independiente de OrcaSlicer y se
 exporta a un 3MF propio, del que se leen tiempo y filamento; por defecto corren hasta seis a la
@@ -59,6 +59,8 @@ SALIDA = ROOT / "proyecto" / "datos" / "procesados" / "orca_k1c_tiempo_material.
 TRABAJO = ROOT / "proyecto" / "resultados" / "orca"
 # Copias resueltas (herencia aplanada) de los preajustes de sistema de OrcaSlicer 2.4.2 para la K1C.
 ORCA_SISTEMA = ROOT / "proyecto" / "datos" / "crudos" / "orca_v2.4.2"
+# Perfiles de sistema de la instalación local de OrcaSlicer (la CLI resuelve su herencia).
+ORCA_INSTALADO = Path("C:/Program Files/OrcaSlicer/resources/profiles/Creality")
 
 NIVELES = {
     "altura_capa_mm": [0.1, 0.2, 0.3],
@@ -260,7 +262,7 @@ def laminar_uno(orca: str, maquina: Path, perfil: Path, filamento: Path, stl: Pa
                 return r
         except zipfile.BadZipFile:
             salida_3mf.unlink()
-    cmd = [orca, "--debug", "0", "--load-settings", f"{maquina};{perfil}", "--load-filament-settings", str(filamento),
+    cmd = [orca, "--debug", "0", "--load-settings", f"{maquina};{perfil}", "--load-filaments", str(filamento),
            "--uptodate", "--slice", "0", "--export-3mf", str(salida_3mf), str(stl)]
     t0 = time.perf_counter()
     for intento in range(reintentos + 1):
@@ -298,12 +300,12 @@ def leer_gcode(ruta: Path) -> dict:
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--orca", default=r"C:\Program Files\OrcaSlicer\orca-slicer.exe")
-    ap.add_argument("--maquina", default=str(ORCA_SISTEMA / "machine_Creality_K1C_0.4_nozzle.json"),
-                    help="JSON de perfil de máquina; por defecto la copia resuelta del preajuste de sistema 2.4.2")
+    ap.add_argument("--maquina", default=str(ORCA_INSTALADO / "machine" / "Creality K1C 0.4 nozzle.json"),
+                    help="JSON de perfil de máquina. Debe ser el de sistema instalado: la CLI rechaza copias aplanadas de máquina")
     ap.add_argument("--proceso-base", default=str(ORCA_SISTEMA / "process_0.20mm_Standard_Creality_K1C_0.4_nozzle.json"),
                     help="JSON de perfil de proceso del que heredan las combinaciones; por defecto «0.20mm Standard @Creality K1C 0.4 nozzle» resuelto")
-    ap.add_argument("--filamento", default=str(ORCA_SISTEMA / "filament_Generic_PLA_K1C.json"),
-                    help="JSON de perfil de filamento; por defecto «Generic PLA @K1C» resuelto. Sustituir por el preajuste propio de eSUN PLA+ exportado desde OrcaSlicer")
+    ap.add_argument("--filamento", default=str(ORCA_SISTEMA / "filament_eSUN_PLA+_K1C_tesis.json"),
+                    help="JSON de perfil de filamento plano; por defecto el preajuste eSUN PLA+ derivado de «Generic PLA @K1C» con los valores de la hoja técnica")
     ap.add_argument("--stl", help="probeta propia; si se omite se genera ASTM D638 tipo IV")
     ap.add_argument("--espesor", type=float, default=3.2)
     ap.add_argument("--patrones", default="grid,triangles,zigzag,lines,cubic,gyroid,tri_hexagon,concentric,lightning,cubic_subdivision",
@@ -338,8 +340,7 @@ def main() -> None:
         combos = combos[: args.limite]
 
     # Máquina y filamento como preajustes de usuario planos, junto a los perfiles de proceso.
-    maquina = TRABAJO / "perfiles" / "_maquina.json"
-    maquina.write_text(json.dumps(como_usuario(json.loads(Path(args.maquina).read_text(encoding="utf-8")), "Creality K1C 0.4 nozzle (tesis)", "machine"), indent=1), encoding="utf-8")
+    maquina = Path(args.maquina)
     filamento = TRABAJO / "perfiles" / "_filamento.json"
     filamento.write_text(json.dumps(como_usuario(json.loads(Path(args.filamento).read_text(encoding="utf-8")), "Filamento (tesis)", "filament"), indent=1), encoding="utf-8")
 
