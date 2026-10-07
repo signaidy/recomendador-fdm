@@ -32,7 +32,7 @@ import joblib
 import numpy as np
 import pandas as pd
 from sklearn.metrics import mean_absolute_error
-from sklearn.model_selection import RepeatedKFold
+from sklearn.model_selection import KFold, RepeatedKFold
 from sklearn.neural_network import MLPRegressor
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
@@ -122,6 +122,48 @@ def validar(df: pd.DataFrame, capas, alpha) -> tuple[np.ndarray, np.ndarray]:
     return pred / cuenta[:, None], base / cuenta[:, None]
 
 
+def seleccionar(df: pd.DataFrame, cv) -> dict:
+    """Elige arquitectura y alpha por validación cruzada interna sobre df (destreza media de las tres respuestas)."""
+    mejor = None
+    for capas in ARQUITECTURAS:
+        for alpha in ALPHAS:
+            pred = np.zeros((len(df), len(RESPUESTAS)))
+            base = np.zeros_like(pred)
+            cuenta = np.zeros(len(df))
+            for tr, te in cv.split(df):
+                m = Sustituto(capas, alpha).fit(df.iloc[tr])
+                pred[te] += m.predict(df.iloc[te])
+                base[te] += df.iloc[tr][RESPUESTAS].median().to_numpy()
+                cuenta[te] += 1
+            pred, base = pred / cuenta[:, None], base / cuenta[:, None]
+            s = float(np.mean([destreza(df[r], pred[:, i], base[:, i])[1] for i, r in enumerate(RESPUESTAS)]))
+            if mejor is None or s > mejor["S_media"]:
+                mejor = dict(capas=capas, alpha=alpha, S_media=s)
+    return mejor
+
+
+def validar_anidada(df: pd.DataFrame) -> tuple[np.ndarray, np.ndarray, list[dict]]:
+    """Validación anidada: en cada pliegue externo (5 × 3) la arquitectura se elige con una validación interna
+    de 3 pliegues sobre el entrenamiento de ese pliegue, y se predice el pliegue externo con ella. La destreza
+    reportada no ha visto la elección de arquitectura, como exigen los numerales 1.3.6 y 3.4."""
+    externa = RepeatedKFold(n_splits=5, n_repeats=3, random_state=SEMILLA)
+    pred = np.zeros((len(df), len(RESPUESTAS)))
+    base = np.zeros_like(pred)
+    cuenta = np.zeros(len(df))
+    elecciones = []
+    for k, (tr, te) in enumerate(externa.split(df)):
+        entren = df.iloc[tr].reset_index(drop=True)
+        interna = KFold(n_splits=3, shuffle=True, random_state=SEMILLA + k)
+        mejor = seleccionar(entren, interna)
+        m = Sustituto(mejor["capas"], mejor["alpha"]).fit(entren)
+        pred[te] += m.predict(df.iloc[te])
+        base[te] += entren[RESPUESTAS].median().to_numpy()
+        cuenta[te] += 1
+        elecciones.append(dict(pliegue=k + 1, capas=str(mejor["capas"]), alpha=mejor["alpha"], S_interna=mejor["S_media"]))
+        print(f"  pliegue externo {k + 1:2d}/15: capas={str(mejor['capas']):10} alpha={mejor['alpha']:<7} S interna {mejor['S_media']:+.3f}")
+    return pred / cuenta[:, None], base / cuenta[:, None], elecciones
+
+
 def main() -> None:
     df = pd.read_csv(DATOS).dropna(subset=RESPUESTAS).reset_index(drop=True)
     print(f"Filas con las tres respuestas: {len(df)} (de 500)")
@@ -138,12 +180,18 @@ def main() -> None:
     mejor = max(resultados, key=lambda r: r["S_media"])
     print(f"\nElegida: capas={mejor['capas']} alpha={mejor['alpha']} (S media {mejor['S_media']:+.3f})")
 
-    # --- métricas detalladas de la arquitectura elegida
-    pred, base = validar(df, mejor["capas"], mejor["alpha"])
+    # --- destreza reportada: validación ANIDADA (la elección de arquitectura ocurre dentro de cada pliegue externo)
+    print("\nValidación anidada (externa 5 × 3, interna 3 pliegues por cada pliegue externo):")
+    pred, base, elecciones = validar_anidada(df)
+    pd.DataFrame(elecciones).to_csv(DIR_TABLAS / "sustituto_mlp_seleccion_anidada.csv", index=False)
+    # destreza no anidada de la arquitectura elegida sobre todos los datos, solo como referencia del sesgo
+    pred_na, base_na = validar(df, mejor["capas"], mejor["alpha"])
     filas = []
     for i, r in enumerate(RESPUESTAS):
         mae, s = destreza(df[r], pred[:, i], base[:, i])
-        filas.append(dict(ambito="todas", material="todos", respuesta=r, unidad=UNIDADES[r], n=len(df), mae=mae, destreza_S=s))
+        mae_na, s_na = destreza(df[r], pred_na[:, i], base_na[:, i])
+        filas.append(dict(ambito="todas", material="todos", respuesta=r, unidad=UNIDADES[r], n=len(df), mae=mae, destreza_S=s,
+                          mae_no_anidada=mae_na, destreza_S_no_anidada=s_na))
         for mat, g in df.groupby("material"):
             if len(g) < 15:
                 continue
@@ -153,8 +201,8 @@ def main() -> None:
     tabla = pd.DataFrame(filas)
     DIR_TABLAS.mkdir(parents=True, exist_ok=True)
     tabla.to_csv(DIR_TABLAS / "sustituto_mlp_validacion.csv", index=False)
-    print("\nDestreza fuera de muestra del sustituto elegido (modelo único, todos los materiales):")
-    print(tabla[tabla.ambito == "todas"][["respuesta", "n", "mae", "destreza_S"]].round(3).to_string(index=False))
+    print("\nDestreza fuera de muestra con validación anidada (modelo único, todos los materiales) y, como referencia, la no anidada:")
+    print(tabla[tabla.ambito == "todas"][["respuesta", "n", "mae", "destreza_S", "mae_no_anidada", "destreza_S_no_anidada"]].round(3).to_string(index=False))
     print("\nPor material (n ≥ 15):")
     print(tabla[tabla.ambito == "por material"].pivot(index="material", columns="respuesta", values="destreza_S").round(3).to_string())
 

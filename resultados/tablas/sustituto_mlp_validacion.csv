@@ -1,28 +1,28 @@
-ambito,material,respuesta,unidad,n,mae,destreza_S
-todas,todos,tension_maxima_mpa,MPa,483,1.766641649327097,0.7123890661443903
-por material,ABS,tension_maxima_mpa,MPa,27,1.4983475151388423,0.6841209078767023
-por material,PETG,tension_maxima_mpa,MPa,91,1.270479705868221,0.5399530580694591
-por material,PLA,tension_maxima_mpa,MPa,18,2.704876366037403,0.519263898182043
-por material,PLA phosphorus,tension_maxima_mpa,MPa,27,1.3197571649375834,0.7107434518997406
-por material,PLA+,tension_maxima_mpa,MPa,237,1.7224757998615583,0.6962995026009331
-por material,PLA-CF,tension_maxima_mpa,MPa,26,1.9687433025359837,0.8087636960089193
-por material,PLA-transparent,tension_maxima_mpa,MPa,24,1.4957469429183075,0.803600441216117
-por material,TPU,tension_maxima_mpa,MPa,24,4.037606237228975,0.6970936614161127
-todas,todos,rugosidad_ra_um,µm,483,0.9078362787238977,0.490672721716779
-por material,ABS,rugosidad_ra_um,µm,27,1.0078084758530528,0.2608843836973612
-por material,PETG,rugosidad_ra_um,µm,91,0.9954965707341871,0.50670183826129
-por material,PLA,rugosidad_ra_um,µm,18,1.2405064676145097,-0.22303667218587897
-por material,PLA phosphorus,rugosidad_ra_um,µm,27,0.6652872486050493,0.6365634813026009
-por material,PLA+,rugosidad_ra_um,µm,237,0.6941419023065809,0.6138727513266129
-por material,PLA-CF,rugosidad_ra_um,µm,26,1.314509585288044,0.2223888327712331
-por material,PLA-transparent,rugosidad_ra_um,µm,24,0.850832371902928,0.5358276427999682
-por material,TPU,rugosidad_ra_um,µm,24,1.7821729400232609,0.07582655172725283
-todas,todos,dureza_shore,Shore D,483,2.4117414737679197,0.6952864540943631
-por material,ABS,dureza_shore,Shore D,27,3.0596311723661707,-0.5648805011154865
-por material,PETG,dureza_shore,Shore D,91,2.9493342778617526,0.6001448822505111
-por material,PLA,dureza_shore,Shore D,18,2.247161190784495,2.7158612585398423e-05
-por material,PLA phosphorus,dureza_shore,Shore D,27,2.4441352250840196,0.3395331001441012
-por material,PLA+,dureza_shore,Shore D,237,1.989565048261145,0.5412492908129675
-por material,PLA-CF,dureza_shore,Shore D,26,2.201010534041769,0.61823699876527
-por material,PLA-transparent,dureza_shore,Shore D,24,1.5203247893320277,0.6478012071045496
-por material,TPU,dureza_shore,Shore D,24,3.591602536582714,0.9327852305164777
+ambito,material,respuesta,unidad,n,mae,destreza_S,mae_no_anidada,destreza_S_no_anidada
+todas,todos,tension_maxima_mpa,MPa,483,1.854079550926859,0.6981540929436503,1.766641649327097,0.7123890661443903
+por material,ABS,tension_maxima_mpa,MPa,27,1.7251688024056007,0.6363028272431037,,
+por material,PETG,tension_maxima_mpa,MPa,91,1.3425174192864684,0.5138678482005729,,
+por material,PLA,tension_maxima_mpa,MPa,18,2.491543476695503,0.5571794284071936,,
+por material,PLA phosphorus,tension_maxima_mpa,MPa,27,1.5564284420014047,0.6588712450599326,,
+por material,PLA+,tension_maxima_mpa,MPa,237,1.8375178085437587,0.6760157254579509,,
+por material,PLA-CF,tension_maxima_mpa,MPa,26,1.8543627206198148,0.8198741946228427,,
+por material,PLA-transparent,tension_maxima_mpa,MPa,24,1.488579529613686,0.8045415608468902,,
+por material,TPU,tension_maxima_mpa,MPa,24,3.975821163960918,0.7017288559405814,,
+todas,todos,rugosidad_ra_um,µm,483,0.9428011107041703,0.47105625217760727,0.9078362787238977,0.490672721716779
+por material,ABS,rugosidad_ra_um,µm,27,1.0526569039572797,0.227993041371229,,
+por material,PETG,rugosidad_ra_um,µm,91,1.1295605879794908,0.4402691299962671,,
+por material,PLA,rugosidad_ra_um,µm,18,1.300259415929486,-0.28194813211641523,,
+por material,PLA phosphorus,rugosidad_ra_um,µm,27,0.8434260146738294,0.5392489256413631,,
+por material,PLA+,rugosidad_ra_um,µm,237,0.7007080802849195,0.6102202125176881,,
+por material,PLA-CF,rugosidad_ra_um,µm,26,1.2358193464559326,0.26893882308898354,,
+por material,PLA-transparent,rugosidad_ra_um,µm,24,1.1219304396995489,0.38792985080588516,,
+por material,TPU,rugosidad_ra_um,µm,24,1.5039613903357483,0.22009747036248772,,
+todas,todos,dureza_shore,Shore D,483,2.3969694306237486,0.6971528405606119,2.4117414737679197,0.6952864540943631
+por material,ABS,dureza_shore,Shore D,27,2.8335527862394714,-0.4492503358299993,,
+por material,PETG,dureza_shore,Shore D,91,2.614670485014952,0.6455168264549044,,
+por material,PLA,dureza_shore,Shore D,18,2.3856849501622386,-0.06161505816861079,,
+por material,PLA phosphorus,dureza_shore,Shore D,27,2.6441712668796047,0.2854783232118496,,
+por material,PLA+,dureza_shore,Shore D,237,2.073588380416391,0.5218753260118844,,
+por material,PLA-CF,dureza_shore,Shore D,26,2.1058350796491734,0.6347450829160872,,
+por material,PLA-transparent,dureza_shore,Shore D,24,1.2467012357379381,0.7111889029178522,,
+por material,TPU,dureza_shore,Shore D,24,4.2179439477080924,0.9210636123424265,,

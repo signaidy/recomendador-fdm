@@ -129,6 +129,18 @@ def rangos_dominio(enum: pd.DataFrame) -> dict:
     return r
 
 
+def rangos_referencia(ref: dict) -> dict:
+    """Normalización relativa a la configuración de referencia: cada objetivo se divide por su valor en la
+    referencia, de modo que S mide cambios proporcionales (−10 % de filamento pesa igual que +10 % de tiempo).
+    Se expresa con el mismo par (lo, hi) que la normalización por dominio, con lo = 0 e hi = valor de referencia:
+    R_n = R/R_ref, M_n = M/M_ref, T_n = T/T_ref y Q_n = 1 − Ra/Ra_ref. Con ella la referencia tiene S = w_r − w_m − w_t."""
+    r = {"resistencia": (0.0, float(ref["pred_tension_maxima_mpa"])), "calidad": (0.0, float(ref["pred_rugosidad_ra_um"]))}
+    if "tiempo_min" in ref and ref["tiempo_min"] == ref["tiempo_min"]:
+        r["material"] = (0.0, float(ref["filamento_g"]))
+        r["tiempo"] = (0.0, float(ref["tiempo_min"]))
+    return r
+
+
 def puntuar(df: pd.DataFrame, pesos: dict, rangos: dict) -> pd.Series:
     """S = w_r·R_n + w_q·Q_n − w_m·M_n − w_t·T_n con cada término normalizado a [0, 1].
 
@@ -494,6 +506,8 @@ def main() -> None:
     p.add_argument("--w-calidad", type=float, default=0.0, help="peso de la calidad (rugosidad baja)")
     p.add_argument("--w-material", type=float, default=0.0, help="peso del filamento")
     p.add_argument("--w-tiempo", type=float, default=0.0, help="peso del tiempo (y de la energía, que es potencia por tiempo)")
+    p.add_argument("--normalizacion", choices=["dominio", "referencia"], default="dominio",
+                   help="dominio: mínimo-máximo del dominio admisible; referencia: cada objetivo dividido por su valor en --referencia")
     p.add_argument("--perfil", choices=list(PERFILES), default=None, help="conjunto de pesos de ejemplo; sustituye a --w-*")
     p.add_argument("--continuo", action="store_true", help="numéricas continuas dentro del rango de los datos")
     p.add_argument("--extrapolar", "--relleno-100", dest="extrapolar", action="store_true",
@@ -524,6 +538,16 @@ def main() -> None:
         for k in ("ra_max", "densidad_max", "altura_min", "velocidad_min", "dureza_min", "tiempo_max", "material_max"):
             setattr(a_dom, k, None)
         args.rangos = rangos_dominio(enumerar(modelo, red, a_dom, orca))
+        if args.normalizacion == "referencia":
+            h, dd, pat, vel = args.referencia.split(",")
+            ref = dict(altura_capa_mm=float(h), densidad_relleno_pct=float(dd), patron_relleno=pat, velocidad_impresion_mms=float(vel),
+                       tipo_impresora=args.impresora or "closed", material=args.material)
+            pr = modelo.predict(pd.DataFrame([ref]))[0]
+            ref.update({f"pred_{n}": float(pr[i]) for i, n in enumerate(red.respuestas)})
+            if orca is not None:
+                ref["tiempo_min"], ref["filamento_g"] = orca.get((ref["altura_capa_mm"], ref["densidad_relleno_pct"], pat, ref["velocidad_impresion_mms"]), (np.nan, np.nan))
+            args.rangos = rangos_referencia(ref)
+            modo += "_ref"
         if sum(normalizar_pesos(args.pesos).values()) > 0:
             w = normalizar_pesos(args.pesos)
             print("PUNTUACIÓN PONDERADA: pesos " + ", ".join(f"{k} {v:.2f}" for k, v in w.items()) + " | rangos " + ", ".join(f"{k} {lo:.2f}-{hi:.2f}" for k, (lo, hi) in args.rangos.items()))
@@ -601,7 +625,7 @@ def main() -> None:
             for dmax, g in front.groupby("densidad_relleno_pct"):
                 ax.scatter(g.pred_rugosidad_ra_um, g.pred_tension_maxima_mpa, label=f"relleno {dmax:.0f} %", s=28)
             ax.set_xlabel("Rugosidad Ra predicha (µm)"); ax.set_ylabel("Tensión máxima predicha (MPa)")
-            ax.set_title(f"Frontera resistencia–rugosidad–relleno, {args.material}, modo {modo} (MILP sobre red ReLU)")
+            ax.set_title(f"Frontera resistencia–rugosidad por nivel de relleno, {args.material}, cámara cerrada", fontsize=10)
             ax.grid(alpha=0.3); ax.legend()
             fig.tight_layout(); fig.savefig(DIR_FIGURAS / f"milp_frontera_{modo}.png", dpi=160)
             print(f"\nFigura: {DIR_FIGURAS / f'milp_frontera_{modo}.png'}")

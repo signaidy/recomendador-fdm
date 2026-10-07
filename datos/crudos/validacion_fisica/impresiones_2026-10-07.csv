@@ -1,0 +1,4 @@
+configuracion,altura_capa_mm,densidad_relleno_pct,patron_relleno,velocidad_impresion_mms,replicas,tiempo_real_min,ancho_mm,largo_mm,espesor_mm,masa_g
+referencia,0.2,20,grid,70,3,26.417,19.607,170.61,3.863,5
+optimo_resistencia,0.3,80,cubic,30,3,47.55,19.66,170.547,3.927,8
+candidata_hipotesis,0.1,20,cubic_subdivision,70,3,47.95,19.747,170.92,3.873,5

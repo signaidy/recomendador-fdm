@@ -118,6 +118,9 @@ def main() -> None:
     for k, etiqueta in (("resistencia", "Resistencia"), ("calidad", "Calidad (rugosidad baja)"), ("material", "Filamento"), ("tiempo", "Tiempo y energía")):
         pesos[k] = sb.slider(etiqueta, 0, 10, int(round(10 * base_w[k])), 1, key=f"w_{k}_{perfil}")
     pesos_n = om.normalizar_pesos(pesos)
+    normalizacion = sb.radio("Normalización de los objetivos", ["Rango del dominio", "Respecto de la referencia"], index=0,
+                             help="Rango del dominio: cada objetivo se escala entre su mínimo y su máximo en todas las combinaciones laminables. "
+                                  "Respecto de la referencia: cada objetivo se divide por su valor en la configuración de referencia, de modo que S mide cambios proporcionales.")
     sb.caption("Pesos efectivos: " + ", ".join(f"{k} {v:.2f}" for k, v in pesos_n.items()))
     sb.header("3. Energía")
     potencia = sb.number_input("Potencia media de la impresora (W), 0 = no estimar", 0.0, 500.0, 0.0, 10.0)
@@ -129,6 +132,9 @@ def main() -> None:
                   altura_min=float(altura_min), patron=None if patron == "libre" else patron,
                   potencia_w=potencia, extrapolar=extrapolar, pesos=pesos_n, rangos=rangos_todos[extrapolar])
     rangos = rangos_todos[extrapolar]
+    if normalizacion == "Respecto de la referencia":
+        rangos = om.rangos_referencia(predecir(modelo, orca, REFERENCIA, potencia))
+        a.rangos = rangos
     pareto = pareto_todos[extrapolar]
 
     # ------------------------------------------------------------------ recomendación
@@ -143,14 +149,14 @@ def main() -> None:
     S_ref = float(om.puntuar(pd.DataFrame([ref]), pesos_n, rangos).iloc[0])
     filas = [dict(fila_resultado("Recomendada (mayor puntuación S)", sol, sol, mae), **{"S": f"{S_sol:.3f}"}),
              dict(fila_resultado("Referencia proyectada", REFERENCIA, ref, mae), **{"S": f"{S_ref:.3f}"})]
-    rod = om.rodilla(pareto, rangos) if pareto is not None else None
+    rod = om.rodilla(pareto, rangos_todos[extrapolar]) if pareto is not None else None  # la rodilla no depende de la normalización elegida
     if rod is not None:
         cfg_rod = {k: rod[k] for k in ["altura_capa_mm", "densidad_relleno_pct", "velocidad_impresion_mms", "patron_relleno"]} | {"tipo_impresora": "closed", "material": "PLA+"}
         pr_rod = predecir(modelo, orca, cfg_rod, potencia)
         filas.insert(1, dict(fila_resultado("Solución de compromiso (rodilla)", cfg_rod, pr_rod, mae), **{"S": f"{float(om.puntuar(pd.DataFrame([pr_rod]), pesos_n, rangos).iloc[0]):.3f}"}))
     tabla = pd.DataFrame(filas)
     st.dataframe(tabla.set_index("Configuración"), width="stretch")
-    st.write(f"**S** es la puntuación ponderada de respuestas normalizadas al dominio (resistencia y calidad suman, filamento y tiempo restan; "
+    st.write(f"**S** es la puntuación ponderada de respuestas normalizadas {'al rango del dominio' if normalizacion == 'Rango del dominio' else 'respecto de la referencia (lo = 0, hi = valor de la referencia)'} (resistencia y calidad suman, filamento y tiempo restan; "
              f"rangos: resistencia {rangos['resistencia'][0]:.1f}–{rangos['resistencia'][1]:.1f} MPa, Ra {rangos['calidad'][0]:.1f}–{rangos['calidad'][1]:.1f} µm, "
              f"filamento {rangos['material'][0]:.2f}–{rangos['material'][1]:.2f} g, tiempo {rangos['tiempo'][0]:.0f}–{rangos['tiempo'][1]:.0f} min). "
              "La recomendación maximiza S de forma exacta con las cotas dadas; la solución de compromiso es el punto de la frontera donde una mejora "
