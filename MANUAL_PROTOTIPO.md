@@ -1,5 +1,11 @@
 # MANUAL DE USO DEL PROTOTIPO
 
+> Este repositorio es el submódulo `proyecto` del repositorio del Trabajo de Graduación
+> (https://github.com/signaidy/Anteproyecto). Las rutas `proyecto/...` que aparecen en este documento
+> se refieren a esa ubicación; si se clona por separado, se omite el prefijo `proyecto/`. Para ejecutar
+> el prototipo basta con `docker compose up --build` en la raíz de este repositorio y abrir
+> http://localhost:8501.
+
 Recomendador de parámetros de impresión FDM para PLA+ con optimización exacta y explicación.
 Anexo del Trabajo de Graduación *Aprendizaje automático explicable para optimizar resistencia y
 eficiencia material FDM*. Versión del 29 de septiembre de 2026.

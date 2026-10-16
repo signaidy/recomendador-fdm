@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+
+# Perfiles y G-code generados por estimar_tiempo_orca.py; se regeneran con el script.
+resultados/orca/perfiles/
+resultados/orca/gcode/
+
+# Registro que OrcaSlicer escribe al laminar por CLI.
+resultados/orca/*.log

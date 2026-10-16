@@ -1,0 +1,15 @@
+# Solo entra a la imagen lo que el Dockerfile copia explícitamente; esto evita enviar al
+# demonio el entorno virtual, los datos crudos y los resultados voluminosos.
+*
+!requirements-app.txt
+!src/entrenar_sustituto.py
+!src/optimizar_milp.py
+!src/explicar.py
+!src/app.py
+!resultados/modelos/
+!resultados/tablas/sustituto_mlp_validacion.csv
+!resultados/tablas/milp_pareto_exacto_discreto_closed.csv
+!resultados/tablas/milp_pareto_exacto_discreto_closed_extrapolar.csv
+!resultados/figuras/shap_global.png
+!datos/procesados/aktepe_ergun_fdm_500.csv
+!datos/procesados/orca_k1c_tiempo_material.csv

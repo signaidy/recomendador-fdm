@@ -1,0 +1,11 @@
+# Prototipo de interfaz del Trabajo de Graduación.
+#   docker compose up --build      construye la imagen y sirve la interfaz en http://localhost:8501
+#   docker compose down            la detiene
+services:
+  recomendador:
+    build: .
+    image: tesis-recomendador-fdm:2026-10-15
+    container_name: recomendador-fdm
+    ports:
+      - "8501:8501"
+    restart: unless-stopped
