@@ -1,10 +1,10 @@
 # ENTORNO Y CÓDIGO DEL TRABAJO DE GRADUACIÓN
 
-> Este repositorio es el submódulo `proyecto` del repositorio del Trabajo de Graduación
-> (https://github.com/signaidy/Anteproyecto). Las rutas `proyecto/...` que aparecen en este documento
-> se refieren a esa ubicación; si se clona por separado, se omite el prefijo `proyecto/`. Para ejecutar
-> el prototipo basta con `docker compose up --build` en la raíz de este repositorio y abrir
-> http://localhost:8501.
+> Repositorio público del prototipo del Trabajo de Graduación
+> (https://github.com/signaidy/recomendador-fdm). Para ejecutar el prototipo basta con
+> `docker compose up --build` en la raíz de este repositorio y abrir http://localhost:8501. Las rutas
+> `proyecto/...` que aparecen en este documento corresponden a la carpeta en que se desarrolló; en este
+> repositorio se omite el prefijo `proyecto/`.
 
 Repositorio reproducible comprometido en el anteproyecto aprobado.
 
